@@ -88,9 +88,7 @@ BondInsights/
 
 ---
 
-## License
 
-MIT License
 
 ---
 
