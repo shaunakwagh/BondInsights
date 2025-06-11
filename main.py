@@ -182,7 +182,9 @@ def process_pdf(pdf_path):
     return texts, embeddings
 
 with gr.Blocks() as demo:
-    gr.Markdown("# Bond Official Statement Q&A and Report Generator")
+    gr.Markdown(
+        "# BondInsights: AI-Powered RAG Q&A and Due Diligence Report Generator"
+    )
     
     with gr.Row():
         pdf_input = gr.Files(label="Upload PDF")
