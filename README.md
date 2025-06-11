@@ -7,7 +7,7 @@ BondInsights is an AI-powered web application that enables municipal bond insure
 ## Features
 
 - **Multi-Document Support:** Upload and analyze multiple bond PDFs at once.
-- **LLM-Powered Q&A:** Ask natural language questions about the uploaded documents and receive answers with source citations.
+- **LLM-Powered Q&A (RAG):** Uses Retrieval-Augmented Generation to answer natural language questions about the uploaded documents, providing answers with precise source citations.
 - **Advanced Search & Filtering:** Instantly search for keywords or phrases across all uploaded documents, with page-level results.
 - **Automated Due Diligence Reports:** Generate 1-2 page PDF reports with clear recommendations and exact source citations.
 - **Customizable Reports:** Choose the structure and focus of generated reports.
