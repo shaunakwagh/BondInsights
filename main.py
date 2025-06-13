@@ -180,29 +180,48 @@ def process_pdf(pdf_path):
     )
     texts = text_splitter.split_documents(documents)
     return texts, embeddings
+def notify_and_query(pdf_files, user_query):
+        if not pdf_files:
+            return gr.update(value="⚠️ Please upload at least one PDF file.", visible=True), ""
+        return gr.update(value="", visible=False), handle_query(pdf_files, user_query)
+
+def notify_and_report(pdf_files):
+    if not pdf_files:
+        return gr.update(value="⚠️ Please upload at least one PDF file.", visible=True), None
+    return gr.update(value="", visible=False), handle_report(pdf_files)
+    
 
 with gr.Blocks() as demo:
     gr.Markdown(
-        "# BondInsights: AI-Powered RAG Q&A and Due Diligence Report Generator"
+        "# BondInsights: AI-Powered RAG Q&A and Due Diligence Report Generator for Municipal Bonds"
     )
+    
     
     with gr.Row():
         pdf_input = gr.Files(label="Upload PDF")
+
+    gr.HTML(
+    """
+    <style>
+    button, [type="button"] {
+        background-color: #6b7280 !important; /* Gray-500 */
+        color: #fff !important;
+        border: none !important;
+    }
+    button:hover, button:focus, [type="button"]:hover, [type="button"]:focus {
+        background-color: #22c55e !important; /* Bright green-500 */
+        color: #fff !important;
+    }
+    </style>
+    """
+
+)
+    notification = gr.Textbox(label="Notification", visible=False, lines=1)
+    
     with gr.Row():
         query_input = gr.Textbox(label="Enter your Question", placeholder="What is the credit rating of this bond?", lines=2)
     with gr.Row():
         query_btn = gr.Button("Ask a Question")
-        # Add custom CSS for hover effect
-        gr.HTML(
-            """
-            <style>
-            button.svelte-1ipelgc:hover, button.svelte-1ipelgc:focus {
-            background-color: #2563eb !important; /* Tailwind blue-600 */
-            color: white !important;
-            }
-            </style>
-            """
-        )
         report_btn = gr.Button("Generate 1-2 Page Report")
 
     with gr.Row():
@@ -216,10 +235,18 @@ with gr.Blocks() as demo:
     report_output = gr.File(label="Download Report PDF")
 
     search_btn.click(fn=search_documents,inputs=[pdf_input, search_input],outputs=search_output)
-    query_btn.click(fn=handle_query, inputs=[pdf_input, query_input], outputs=output)
-    report_btn.click(fn=handle_report, inputs=pdf_input, outputs=report_output)
+    query_btn.click(
+    fn=notify_and_query,
+    inputs=[pdf_input, query_input],
+    outputs=[notification, output]
+)
+    report_btn.click(
+    fn=notify_and_report,
+    inputs=pdf_input,
+    outputs=[notification, report_output]
+)
 
-    
+   
 
 if __name__ == "__main__":
     demo.launch()
